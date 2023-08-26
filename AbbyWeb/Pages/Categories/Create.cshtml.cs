@@ -22,10 +22,21 @@ namespace AbbyWeb.Pages.Categories
         //public async Task<IActionResult> OnPost(Category category)
         public async Task<IActionResult> OnPost()
         {
-            //await _db.Categories.AddAsync(category);
-            await _db.Categories.AddAsync(Category); //Because of we are used [BindProperties] we can pass the entity object directly.
-            await _db.SaveChangesAsync();
-            return RedirectToPage("Index");
+            if(Category.Name == Category.DisplayOrder.ToString())
+            {
+                ModelState.AddModelError(string.Empty, "The DisplayOrder cannot exactly match the Name.");
+            }
+            if(ModelState.IsValid)
+            {
+                //await _db.Categories.AddAsync(category);
+                await _db.Categories.AddAsync(Category); //Because of we are used [BindProperties] we can pass the entity object directly.
+                await _db.SaveChangesAsync();
+                return RedirectToPage("Index");
+            }
+            else
+            {
+                return Page();
+            }
         }
     }
 }
